@@ -1,0 +1,41 @@
+# Python
+*.pyc
+*~
+__pycache__
+
+#### geral ####
+cargas/
+
+# Env
+.ve
+ve
+.env
+myvenv/
+venv/
+env/
+
+# Static folder at project root
+/static/
+
+# macOS
+._*
+.DS_Store
+.fseventsd
+.Spotlight-V100
+
+# Windows
+Thumbs.db*
+ehthumbs*.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Visual Studio
+.vscode/
+.history/
+*.code-workspace
+
+# Extras
+.passos
+scripts/
+scripts/Docs.xlsx
+Docs.xlsx
