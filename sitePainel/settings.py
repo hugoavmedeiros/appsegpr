@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-BR'
 
 TIME_ZONE = 'UTC'
 
@@ -150,6 +150,8 @@ JAZZMIN_SETTINGS = {
         "auth", 
         "planos.Plano",
         "planos.AcaoPlano",
+        "reunioes.Reuniao",
+        "reunioes.Encaminhamento",
         "apoio.Ano",
         "apoio.EixoPlano",
         "apoio.TipoPrograma",
@@ -192,8 +194,8 @@ JAZZMIN_SETTINGS = {
         "appPainel.Tipo": "fas fa-list",
         "appPainel.Meta": "fas fa-chart-bar",
         "appPainel.Etapa": "fas fa-chart-bar",
-        "reuniao.Reuniao": "fas fa-handshake",
-        "reuniao.Encaminhamento": "fas fa-list",
+        "reunioes.Reuniao": "fas fa-handshake",
+        "reunioes.Encaminhamento": "fas fa-list",
     },
     
     "default_icon_children": "fas fa-square",

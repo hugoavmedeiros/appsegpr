@@ -16,7 +16,7 @@ from decimal import Decimal
 
 #### modelos ####
 from orgaos.models import Orgao, AIS, Unidade, Responsavel
-from apoio.models import Ano, EixoPlano
+from apoio.models import Ano, EixoPlano, Indicador, Municipio, Bairro, Turno
 
 PERCENTAGE_VALIDATOR = [MinValueValidator(0), MaxValueValidator(100)]
 
@@ -63,17 +63,27 @@ class Plano(models.Model):
 
 ### Ação ###
 class AcaoPlano(models.Model):
-    # what - e traz who e where 3w
+    # what 1w
     plano = models.ForeignKey(Plano, on_delete=models.CASCADE, verbose_name = _("Plano"))
-    # what
     nome = models.CharField(max_length=255, verbose_name = _("Nome da Ação"))
-    # how 3w1h
-    descricao = models.TextField(blank=True, null=True, verbose_name = _("Descrição"))
-    # why 4w1h
+    # why 2w
+    diagnostico = models.TextField(
+        blank=True, null=True, default = '-', verbose_name = _("Diagnóstico")
+        )
     eixo = models.ForeignKey(EixoPlano, on_delete=models.CASCADE, verbose_name = _("Eixo do Plano"))
-    # when 5w1h
+    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE, verbose_name = _("Indicador"))
+    # where 3w
+    municipio = models.ManyToManyField(Municipio, verbose_name = _("Nome do Município"))
+    bairro = models.ManyToManyField(Bairro, verbose_name = _("Nome do Bairro"))
+    prioritario = models.BooleanField(default=False, verbose_name = _("Território Prioritário?"))
+    # when 4h
     data_inicio = models.DateField(default=date.today, verbose_name = _("Início"))
     data_termino = models.DateField(blank=True, null=True, verbose_name = _("Término"))
+    turno = models.ManyToManyField(Turno, verbose_name = _("Turno"))
+    # who 5w
+    responsavel = models.ForeignKey(Responsavel, on_delete=models.CASCADE, verbose_name = _("Nome do(a) Responsável"))
+    # how 5w1h
+    descricao = models.TextField(blank=True, null=True, verbose_name = _("Descrição"))
     # how much 5w2h
     policiais = models.CharField(_("Policiais"), max_length=6, validators=[RegexValidator(r'^\d{1,10}$')])
     diarias = models.CharField(_("Diárias"), max_length=6, validators=[RegexValidator(r'^\d{1,10}$')])

@@ -99,3 +99,66 @@ class TipoAcao(models.Model): # lista com tipos de ação
     
     class Meta:
         verbose_name_plural = "Tipo da Ação"
+
+### Indicador ###
+class Indicador(models.Model): # lista com tipos de metas
+    nome = models.CharField(_("Tipo"), max_length=255)
+    sigla = models.CharField(_("Tipo"), max_length=255)
+    history = HistoricalRecords()
+
+    def publish(self):
+        self.published_date = date.today()
+        self.save()
+
+    def __str__(self):
+        return self.sigla
+    
+    class Meta:
+        verbose_name_plural = "Indicador"
+
+### Município ###
+class Municipio(models.Model):
+    nome = models.CharField(max_length=100, verbose_name = _("Nome do Município"))
+    codigo = models.CharField(max_length=7, verbose_name = _("Código do Município"))
+    rd = models.CharField(max_length=30, verbose_name = _("Região de Desenvolvimento"), default="-")
+
+    def publish(self):
+        self.published_date = date.today()
+        self.save()
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name_plural = "Município"
+        permissions = [("can_export_data", "Can Export Data")]
+
+### Bairro ###
+class Bairro(models.Model):
+    municipio = models.ForeignKey(Municipio, on_delete=models.CASCADE, verbose_name = _("Nome Município"))
+    nome = models.CharField(max_length=100, verbose_name = _("Nome do Bairro"))
+
+    def publish(self):
+        self.published_date = date.today()
+        self.save()
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name_plural = "Bairro"
+        permissions = [("can_export_data", "Can Export Data")]
+
+### Turno ###
+class Turno(models.Model):
+    nome = models.CharField(max_length=100, verbose_name = _("Nome do Turno"))
+
+    def publish(self):
+        self.published_date = date.today()
+        self.save()
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name_plural = "Turno"
