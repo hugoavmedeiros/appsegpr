@@ -1,6 +1,8 @@
 #### BASE ####
 from django.contrib import admin
 from django.utils import timezone
+from django.urls import reverse
+from django.utils.html import format_html
 
 #### LIBS ####
 from import_export.admin import ImportExportModelAdmin
@@ -34,30 +36,47 @@ class ReuniaoAdmin(ImportExportModelAdmin): # lista_display permite mostrar camp
         "data",
         "numero",
         "assunto",
+        'link_para_encaminhamentos',
         )
+    
+    def link_para_encaminhamentos(self, obj):
+        url = reverse('admin:reunioes_encaminhamento_changelist')  
+        url += f'?reuniao_id={obj.id}'  
+        return format_html('<a class="button" href="{}">Consultar Encaminhamentos</a>', url)
+    link_para_encaminhamentos.short_description = 'Encaminhamentos'
 
 @admin.register(Encaminhamento) # chama diretamente
 class EncaminhamentoAdmin(ImportExportModelAdmin): # lista_display permite mostrar campos customizados
     list_display = (
-        "reuniao",
+        "encaminhamento",
         'get_data',
         "assunto",
-        "encaminhamento",
         "prazo",
         "devolutiva",
+        'link_para_reuniao',
         )
     list_filter = (
         "reuniao__politica",
+        "reuniao",
         "assunto", 
         "reuniao__data",
         VencimentoProximoFilter
         ) # cria filtros
     list_editable = (
-        "encaminhamento",
         "prazo",
         "devolutiva",
         ) # permite editar do preview
     
+    #def link_para_reuniao(self, obj):
+    #    url = reverse('admin:reunioes_reuniao_change', args=[obj.reuniao_id])  
+    #    return format_html('<a class="button" href="{}">Voltar para Reunião</a>', url)
+    #link_para_reuniao.short_description = 'Reunião'
+
+    def link_para_reuniao(self, obj):
+        url = reverse('admin:reunioes_reuniao_change', args=[obj.reuniao_id])
+        return format_html('<a class="button" href="{}">Ver Reunião</a>', url)
+    link_para_reuniao.short_description = 'Reunião'
+
     def get_data(self, obj):
         return obj.reuniao.data
 

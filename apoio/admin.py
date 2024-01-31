@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
 
 # models #
-from .models import EixoPlano, Ano, TipoPrograma, TipoAcao, Indicador, Municipio, Bairro, Turno
+from .models import EixoPlano, Ano, TipoPrograma, TipoAcao, Indicador, Municipio, Bairro, Turno, Status
 
 # Eixos do Plano #
 @admin.register(EixoPlano) # chama diretamente
@@ -43,4 +43,8 @@ class BairroAdmin(ImportExportModelAdmin): # lista_display permite mostrar campo
 
 @admin.register(Turno) # chama diretamente
 class TurnoAdmin(ImportExportModelAdmin): # lista_display permite mostrar campos customizados
+    list_display = ("nome",)
+
+@admin.register(Status) # chama diretamente
+class StatusAdmin(ImportExportModelAdmin): # lista_display permite mostrar campos customizados
     list_display = ("nome",)

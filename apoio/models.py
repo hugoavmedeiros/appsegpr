@@ -162,3 +162,18 @@ class Turno(models.Model):
 
     class Meta:
         verbose_name_plural = "Turno"
+
+### Status ###
+class Status(models.Model): # lista com status de metas e etapas
+    nome = models.CharField(_("Status"), max_length=255)
+    history = HistoricalRecords()
+
+    def publish(self):
+        self.published_date = date.today()
+        self.save()
+
+    def __str__(self):
+        return self.nome
+    
+    class Meta:
+        verbose_name_plural = "Status"

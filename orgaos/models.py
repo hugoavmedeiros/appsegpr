@@ -109,7 +109,7 @@ class Unidade(models.Model):
         return self.sigla
     
     class Meta:
-        verbose_name_plural = "AIS"
+        verbose_name_plural = "Unidade"
 
 ### Responsável ###
 class Responsavel(models.Model):
