@@ -50,7 +50,6 @@ class EncaminhamentoAdmin(ImportExportModelAdmin): # lista_display permite mostr
     list_display = (
         "encaminhamento",
         'get_data',
-        "assunto",
         "prazo",
         "devolutiva",
         'link_para_reuniao',
@@ -60,21 +59,24 @@ class EncaminhamentoAdmin(ImportExportModelAdmin): # lista_display permite mostr
         "reuniao",
         "assunto", 
         "reuniao__data",
-        VencimentoProximoFilter
+        VencimentoProximoFilter,
+        "responsavel"
         ) # cria filtros
     list_editable = (
         "prazo",
         "devolutiva",
         ) # permite editar do preview
     
+    #### modelo com edit ####
     #def link_para_reuniao(self, obj):
     #    url = reverse('admin:reunioes_reuniao_change', args=[obj.reuniao_id])  
     #    return format_html('<a class="button" href="{}">Voltar para Reunião</a>', url)
     #link_para_reuniao.short_description = 'Reunião'
 
     def link_para_reuniao(self, obj):
-        url = reverse('admin:reunioes_reuniao_change', args=[obj.reuniao_id])
-        return format_html('<a class="button" href="{}">Ver Reunião</a>', url)
+        url = reverse('admin:reunioes_reuniao_changelist')  
+        url += f'?reuniao_id={obj.reuniao_id}'
+        return format_html('<a class="button" href="{}">Voltar para reuniões</a>', url)
     link_para_reuniao.short_description = 'Reunião'
 
     def get_data(self, obj):
