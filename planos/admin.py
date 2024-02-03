@@ -1,6 +1,8 @@
 # django #
 from django.contrib import admin
 from django.utils import timezone
+from django.urls import reverse
+from django.utils.html import format_html
 
 # libs #
 from django.contrib import admin
@@ -24,11 +26,24 @@ class PlanoAdmin(ImportExportModelAdmin): # lista_display permite mostrar campos
         "ais",
         "unidade",
         "responsavel",
+        'link_para_acoes',
         )
+    
+    list_filter = (
+        'ais__nome',
+        "unidade__nome",
+        'responsavel',
+        ) # cria filtros
+    
+    def link_para_acoes(self, obj):
+        url = reverse('admin:planos_acaoplano_changelist')  
+        url += f'?reuniao_id={obj.id}'  
+        return format_html('<a class="button" href="{}">Consultar Ações</a>', url)
+    link_para_acoes.short_description = 'Ações'
 
 @admin.register(AcaoPlano) # chama diretamente
 class AcaoPlanoAdmin(ImportExportModelAdmin): # lista_display permite mostrar campos customizados
-    list_display = ("nome", "policiais", "diarias", "pjes")
+    list_display = ("nome", "descricao", "policiais", "diarias", "pjes")
 
     list_filter = (
         "data_termino",

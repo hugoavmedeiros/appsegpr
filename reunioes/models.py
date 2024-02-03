@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from datetime import date
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 #### LIBS ####
 from simple_history.models import HistoricalRecords
@@ -41,10 +42,21 @@ class Encaminhamento(models.Model): # criar reuniões
     gestor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name = _("Nome do(a) Gestor(a)"))
     # quando
     status = models.ForeignKey(Status, on_delete=models.CASCADE, verbose_name = _("Status"))
-    prazo = models.DateField(default=date.today, verbose_name = _("Prazo"))
-    devolutiva = models.TextField(_("Devolutiva"))
+    prazo = models.DateField(default=date.today, verbose_name = _("Prazo Original"))
+    prazo_out = models.DateField(default=date.today, verbose_name = _("Novo Prazo"))
+    posicao = models.CharField(_("Posição Atual"), max_length=300)
+    devolutiva = models.TextField(_("Resposta"))
 
     history = HistoricalRecords()
+
+    def calcular_status(self):
+        dias_restantes = (self.prazo - date.today()).days
+        if dias_restantes < 0:
+            return 'Atrasado', dias_restantes, 'red', 'white', 'fas fa-exclamation-circle'
+        elif dias_restantes == 0:
+            return 'Hoje', dias_restantes, 'yellow', 'black', 'fas fa-exclamation-triangle'
+        else:
+            return 'Em dia', dias_restantes, 'green', 'white', 'fas fa-check-circle'
 
     class Meta:
         verbose_name_plural = "Encaminhamentos"

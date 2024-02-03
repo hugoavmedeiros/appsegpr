@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.utils import timezone
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 #### LIBS ####
 from import_export.admin import ImportExportModelAdmin
@@ -28,7 +29,7 @@ class VencimentoProximoFilter(admin.SimpleListFilter):
         elif self.value() == 'today':
             return queryset.filter(prazo=timezone.now().date())
 
-#### Formulários ####
+#### Reunião ####
 @admin.register(Reuniao) # chama diretamente
 class ReuniaoAdmin(ImportExportModelAdmin): # lista_display permite mostrar campos customizados
     list_display = (
@@ -45,13 +46,16 @@ class ReuniaoAdmin(ImportExportModelAdmin): # lista_display permite mostrar camp
         return format_html('<a class="button" href="{}">Consultar Encaminhamentos</a>', url)
     link_para_encaminhamentos.short_description = 'Encaminhamentos'
 
+#### Encaminhamentos ####
 @admin.register(Encaminhamento) # chama diretamente
 class EncaminhamentoAdmin(ImportExportModelAdmin): # lista_display permite mostrar campos customizados
     list_display = (
         "encaminhamento",
-        'get_data',
+        "posicao",
         "prazo",
-        "devolutiva",
+        "prazo_out",
+        'calcular_status',
+        'get_data',
         'link_para_reuniao',
         )
     list_filter = (
@@ -63,8 +67,7 @@ class EncaminhamentoAdmin(ImportExportModelAdmin): # lista_display permite mostr
         "responsavel"
         ) # cria filtros
     list_editable = (
-        "prazo",
-        "devolutiva",
+        "prazo_out",
         ) # permite editar do preview
     
     #### modelo com edit ####
@@ -81,5 +84,15 @@ class EncaminhamentoAdmin(ImportExportModelAdmin): # lista_display permite mostr
 
     def get_data(self, obj):
         return obj.reuniao.data
+    
+    def calcular_status_with_days(self, obj):
+        status, dias_restantes, bg_color, text_color, icon_class = obj.calcular_status()
+        return format_html(
+            '<span style="background-color: {}; color: {};">'
+            '<i class="{}"></i> {} ({})'
+            '</span>',
+            bg_color, text_color, icon_class, status, dias_restantes
+        )
+    calcular_status_with_days.short_description = 'Status e Dias Restantes'
 
     get_data.short_description = 'Data'
