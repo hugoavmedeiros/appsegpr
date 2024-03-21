@@ -201,9 +201,9 @@
                         </div>
                         <div class="info">
                             {% if perms|can_view_self %}
-                                <a href="{% jazzy_admin_url request.user request.current_app|default:"admin" %}" class="d-block">{{ request.user }}</a>
+                                <a href="{% jazzy_admin_url request.user request.current_app|default:"admin" %}" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
                             {% else %}
-                                <span class="d-block" style="color: white;">{{ request.user }}</span>
+                                <span class="d-block" style="color: white;">{{ request.user.first_name }} {{ request.user.last_name }}</span>
                             {% endif %}
                         </div>
                     </div>
@@ -329,7 +329,7 @@
                 <b>{% trans 'Jazzmin version' %}</b> {% get_jazzmin_version %}
             </div>
             {% autoescape off %}
-                <strong>{% trans 'Copyright' %} &copy; {% now 'Y' %} {{ jazzmin_settings.copyright }}.</strong> {% trans 'All rights reserved.' %}
+                <strong>{% trans 'Copyright' %} &copy; {% now 'Y' %} {{ jazzmin_settings.copyright }}.</strong> {% trans 'Todos os direitos reservados.' %}
             {% endautoescape %}
         </footer>
         {% if jazzmin_settings.show_ui_builder %}
