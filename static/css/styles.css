@@ -1,0 +1,10 @@
+.sidebar {
+    /* Mantenha a largura fixa da barra lateral */
+    width: 250px; /* ou o valor que desejar */
+    flex: 0 0 250px; /* ou o valor que desejar */
+    /* Outros estilos aqui */
+}
+
+.select2-selection__choice {
+    background-color: #f0f0f0; /* Altere para a cor desejada */
+}
